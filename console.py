@@ -11,18 +11,22 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+classes = {
+               'BaseModel': BaseModel, 'User': User, 'Place': Place,
+               'State': State, 'City': City, 'Amenity': Amenity,
+               'Review': Review
+              }
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
-
-    # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
                'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
               }
+    # determines prompt for interactive/non-interactive modes
+    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
@@ -118,13 +122,42 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif args.split()[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        args_list = args.split()
+        class_name = args_list[0]
+
+        # Extracting parameters
+        params = ' '.join(args_list[1:])
+        param_list = params.split()
+
+        kwargs = {}
+        for param in param_list:
+            key_val = param.split('=')
+            if len(key_val) == 2:
+                key, val = key_val
+                key = key.strip()
+                val = val.strip().replace('_', ' ').replace('\\"', '"')
+
+                if val[0] == '"' and val[-1] == '"' and val.count('\\"') % 2 == 0:
+                    val = val[1:-1].replace('\\"', '"')
+                elif '.' in val:
+                    try:
+                        val = float(val)
+                    except ValueError:
+                        continue
+                else:
+                    try:
+                        val = int(val)
+                    except ValueError:
+                        continue
+
+                kwargs[key] = val
+        new_instance = HBNBCommand.classes[class_name](**kwargs)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
