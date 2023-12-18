@@ -56,6 +56,10 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """
+            delete Object from objects
+            if no object provided , no action
+        """
         if obj is not None:
             key = f"{obj.__class__.__name__}.{obj.id}"
             self.__objects.pop(key, None)
