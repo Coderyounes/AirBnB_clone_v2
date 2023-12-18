@@ -13,7 +13,7 @@ class FileStorage:
         if cls is not None:
             dicct = {}
             for key, value in self.__objects.items():
-                if cls == value.__class__ or value.__class__.__name__:
+                if cls == value.__class__ or cls == value.__class__.__name__:
                     dicct[key] = value
             return dicct
         return FileStorage.__objects
@@ -54,6 +54,7 @@ class FileStorage:
                     self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
 
     def delete(self, obj=None):
         """
