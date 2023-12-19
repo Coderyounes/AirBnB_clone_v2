@@ -2,14 +2,17 @@
 """ Console Module """
 import cmd
 import sys
-from models.base_model import BaseModel
+import models
 from models.__init__ import storage
+from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import shlex
+import datetime
 
 classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -233,23 +236,30 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    def do_all(self, args):
-        """ Shows all objects, or all objects of a class"""
-        print_list = []
-
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+    def do_all(self, arg):
+        """Prints string representations of instances"""
+        args = shlex.split(arg)
+        obj_list = []
+        if len(args) == 0:
+            obj_dict = models.storage.all()
+        elif args[0] in classes:
+            obj_dict = models.storage.all(classes[args[0]])
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            print("** class doesn't exist **")
+            return False
+        for key, obj in obj_dict.items():
+            obj_info = f"[{obj.__class__.__name__}] ({key}) "
+            if hasattr(obj, 'to_dict') and callable(getattr(obj, 'to_dict')):
+                obj_info += str(obj.to_dict())
+            else:
+                if isinstance(obj, dict):
+                    obj_info += str({k: v.isoformat() if isinstance(v, datetime.datetime) else v for k, v in obj.items()})
+                else:
+                    obj_info += str({k: getattr(obj, k).isoformat() if isinstance(getattr(obj, k), datetime.datetime) else getattr(obj, k) for k in obj.__dict__.keys()})
+            obj_list.append(obj_info)
+        print("[", end="")
+        print(", ".join(obj_list), end="")
+        print("]")
 
     def help_all(self):
         """ Help information for the all command """
