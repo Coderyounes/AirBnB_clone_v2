@@ -3,7 +3,7 @@
 from models.base_model import BaseModel, Base
 import models
 from sqlalchemy import Column, String
-from os import env
+from os import getenv
 
 
 class User(BaseModel, Base):
