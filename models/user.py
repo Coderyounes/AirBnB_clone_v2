@@ -2,6 +2,7 @@
 """This module defines a class User"""
 from models.base_model import BaseModel, Base
 import models
+import sqlalchemy
 from sqlalchemy import Column, String
 from os import getenv
 
@@ -15,11 +16,11 @@ class User(BaseModel, Base):
         first_name = Column(String(128), nullable=False)
         last_name = Column(String(128), nullable=False)
     else:
-        email = ''
-        password = ''
-        first_name = ''
-        last_name = ''
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
 
     def __init__(self, *args, **kwargs):
-        """initializes city"""
+        """initializes users"""
         super().__init__(*args, **kwargs)
