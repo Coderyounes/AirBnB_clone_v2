@@ -28,14 +28,13 @@ class DBStorage:
         host = getenv('HBNB_MYSQL_HOST')
         passwd = getenv('HBNB_MYSQL_PWD')
         env = getenv('HBNB_ENV')
-        self.__engine = create_engine("mysql://{}:{}@{}/{}".format(user, 
-                                                                   passwd, 
-                                                                   host, 
+        self.__engine = create_engine("mysql://{}:{}@{}/{}".format(user,
+                                                                   passwd,
+                                                                   host,
                                                                    dbname))
-        
+
         if env == 'test':
             Base.metadata.drop.all()
-
 
     def all(self, cls=None):
         """query on the current database session"""
@@ -50,12 +49,12 @@ class DBStorage:
 
     def new(self, obj):
         self.__session.add(obj)
-    
+
     def save(self):
         self.__session.commit()
-    
+
     def delete(self, obj=None):
-        if obj != None:
+        if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
