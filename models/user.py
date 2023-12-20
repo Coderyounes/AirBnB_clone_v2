@@ -2,9 +2,7 @@
 """This module defines a class User"""
 from models.base_model import BaseModel, Base
 import models
-import sqlalchemy
 from sqlalchemy import Column, String
-from os import getenv
 from sqlalchemy.orm import relationship
 
 
@@ -17,6 +15,7 @@ class User(BaseModel, Base):
         first_name = Column(String(128), nullable=False)
         last_name = Column(String(128), nullable=False)
         places = relationship("Place", backref="user")
+        reviews = relationship("Review", backref="user")
     else:
         email = ""
         password = ""
