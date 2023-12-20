@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Test link Many-To-Many Place <> Amenity
 """
+import models
 from models.state import State
 from models.city import City
 from models.user import User
@@ -43,6 +44,6 @@ place_2.amenities.append(amenity_1)
 place_2.amenities.append(amenity_2)
 place_2.amenities.append(amenity_3)
 
-storage.save()
+models.storage.save()
 
 print("OK")

@@ -253,9 +253,15 @@ class HBNBCommand(cmd.Cmd):
                 obj_info += str(obj.to_dict())
             else:
                 if isinstance(obj, dict):
-                    obj_info += str({k: v.isoformat() if isinstance(v, datetime.datetime) else v for k, v in obj.items()})
+                    obj_info += str({k: v.isoformat()
+                                     if isinstance(v, datetime.datetime)
+                                     else v for k, v in obj.items()})
                 else:
-                    obj_info += str({k: getattr(obj, k).isoformat() if isinstance(getattr(obj, k), datetime.datetime) else getattr(obj, k) for k in obj.__dict__.keys()})
+                    obj_info += str({k: getattr(obj, k).isoformat()
+                                     if isinstance(getattr(obj, k),
+                                                   datetime.datetime)
+                                     else getattr(obj, k)
+                                     for k in obj.__dict__.keys()})
             obj_list.append(obj_info)
         print("[", end="")
         print(", ".join(obj_list), end="")

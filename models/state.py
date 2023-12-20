@@ -21,12 +21,12 @@ class State(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """initializes state"""
-        super().__init__(*args, **kwargs) 
+        super().__init__(*args, **kwargs)
 
     if models.t_stor != 'db':
         def get_cities(self):
             return self.all(cls=City)
-    
+
         def cities(self):
-            all_cities = models.storage.get_all_cities() 
+            all_cities = models.storage.get_all_cities()
             return [city for city in all_cities if city.state_id == self.id]
