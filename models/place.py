@@ -3,8 +3,17 @@
 from models.base_model import BaseModel, Base
 import models
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from os import getenv
+
+if models.t_stor == "db":
+    place_amenity = Table(
+        'place_amenity',
+        Base.metadata,
+        Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
+        Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+        )
+
 
 class Place(BaseModel, Base):
     if models.t_stor == 'db':
@@ -20,6 +29,7 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         reviews = relationship("Review", backref="place")
+        amenities = relationship("Amenity", viewonly=False ,secondary="place_amenity", backref="place_amenities")
     else:    
         """ A place to stay """
         city_id = ""
@@ -49,3 +59,13 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     review_list.append(review)
             return review_list
+
+        def amenities(self):
+            """getter attribute returns the list of Amenity instances"""
+            from models.amenity import Amenity
+            amenity_list = []
+            all_amenities = models.storage.all(Amenity)
+            for amenity in all_amenities.values():
+                if amenity.place_id == self.id:
+                    amenity_list.append(amenity)
+            return amenity_list
