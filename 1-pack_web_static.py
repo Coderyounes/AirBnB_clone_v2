@@ -12,14 +12,14 @@ def do_pack():
         Function Generate tgz archive file
     """
     try:
-        if not path.exists('/web_static/versions'):
-            makedirs('/web_static/versions')
+        if not path.exists('versions'):
+            makedirs('versions')
 
         date = datetime.now()
         f_date = date.strftime("%Y%m%d%H%M%S")
-        archive_path = "web_static/versions/web_static_{}.tgz".format(f_date)
+        archive_path = "versions/web_static_{}.tgz".format(f_date)
 
-        tar_result = local("tar -cvzf {} web_static/".format(archive_path))
+        tar_result = local("tar -cvzf {} web_static".format(archive_path))
 
         if tar_result.failed:
             return None
