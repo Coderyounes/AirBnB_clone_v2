@@ -5,25 +5,21 @@ from pathlib import Path
 
 env.hosts = ['54.89.194.187', '54.157.141.63']
 
+
 def do_deploy(archive_path):
     """ Documentation """
     file_path = Path(archive_path)
     if not file_path.is_file():
         return False
     try:
-    	name = archive_path.split("/").split(".")[0]
-    	put(archive_path, "/tmp/")
-    	run("tar -xzf {} -C /data/web_static/releases/{}".format(archive_path, name))
-    	run("rm /tmp/{}".format(archive_path))
-    	run("")
-    	run("")
-    	run("")
-    	return True
+        n_ext = archive_path.split("/")[-1]
+        name = n_ext.split(".")[0]
+        new = "/data/web_static/releases/{}".format(name)
+        put(archive_path, "/tmp/")
+        run("tar -xzf /tmp/{} -C {}".format(n_ext, new))
+        run("rm /tmp/{}".format(n_ext))
+        run("rm /data/web_static/current")
+        run("ln -s {} /data/web_static/current".format(new))
+        return True
     except Exception:
-    	return False
-    # Step this script should Take :
-    #   -> Upload the archive to the /tmp/ 
-    #   -> Uncompress to /data/web_static/releases/<archive filename without extension>
-    #   -> Delete the archive from the web server
-    #   -> Delete the symbolic Link /data/web_static/current
-    #   ->  Create new smbolic link to /data/web_static/releases/<archive filename without extension>
+        return False
