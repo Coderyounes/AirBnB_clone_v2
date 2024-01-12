@@ -1,3 +1,5 @@
+# Puppet file for setting up web static
+
 package { 'nginx':
   ensure => installed,
 }
