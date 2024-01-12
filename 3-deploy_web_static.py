@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-    Python Script Use Fabric Library to generate a achrive file
+    Python Script Automate the Process of deployement
 """
 from fabric.api import local, env, put, run
 from datetime import datetime
@@ -31,8 +31,12 @@ def do_pack():
     except Exception:
         return None
 
+
 def do_deploy(archive_path):
-    """ Documentation """
+    """
+    Function deploy the Code to the server
+        archive_path: path of the Code files
+    """
     file_path = Path(archive_path)
     if not file_path.is_file():
         return False
@@ -50,8 +54,12 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
-    
+
+
 def deploy():
+    """
+        Full deployement , Call other functions
+    """
     archive = do_pack()
     if archive is None:
         return False
