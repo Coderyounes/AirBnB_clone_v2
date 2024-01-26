@@ -26,6 +26,7 @@ def C_fun(text):
     """
         function  use Flask Variables
     """
+    text = text.replace("_", " ")
     return "C is {}".format(text)
 
 
