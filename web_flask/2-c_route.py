@@ -26,7 +26,7 @@ def C_fun(text):
     """
         function  use Flask Variables
     """
-    return "C is %s" % text
+    return "C is {}".format(text)
 
 
 if __name__ == '__main__':
