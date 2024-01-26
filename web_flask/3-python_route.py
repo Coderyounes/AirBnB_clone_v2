@@ -33,6 +33,7 @@ def C_fun(text):
 @app.route("/python/", defaults={'text': 'is cool'}, strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
 def py_fun(text):
+    text = text.replace("_", " ")
     return "Python {}".format(text)
 
 
