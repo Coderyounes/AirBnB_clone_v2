@@ -14,7 +14,7 @@ def Hello():
 
 
 @app.route("/hbnb", strict_slashes=False)
-def Hello():
+def HBNB():
     """
         Flask Function retunrn HBNB
     """
