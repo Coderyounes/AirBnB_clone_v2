@@ -7,6 +7,7 @@ from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+import shlex
 
 
 class State(BaseModel, Base):
@@ -24,9 +25,17 @@ class State(BaseModel, Base):
         super().__init__(*args, **kwargs)
 
     if models.t_stor != 'db':
-        def get_cities(self):
-            return self.all(cls=City)
-
+        @property
         def cities(self):
-            all_cities = models.storage.get_all_cities()
-            return [city for city in all_cities if city.state_id == self.id]
+            var = models.storage.all()
+            lista = []
+            result = []
+            for key in var:
+                city = key.replace('.', ' ')
+                city = shlex.split(city)
+                if (city[0] == 'City'):
+                    lista.append(var[key])
+            for elem in lista:
+                if (elem.state_id == self.id):
+                    result.append(elem)
+            return (result)
